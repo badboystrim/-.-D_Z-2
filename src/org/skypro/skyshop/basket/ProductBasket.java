@@ -44,7 +44,7 @@ public class ProductBasket {
 
     public boolean hasProduct(String title) {
         for (int i = 0; i < count; i++) {
-            if (products[i].getTitle().equals(title)) {
+            if (products[i].getName().equals(title)) {
                 return true;
             }
         }
