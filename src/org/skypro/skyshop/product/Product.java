@@ -1,17 +1,17 @@
 package org.skypro.skyshop.product;
 
 public abstract class Product {
-    private final String title;
+    private final String name;
 
-    public Product(String title) {
-        if (title == null || title.isBlank()) {
+    public Product(String name) {
+        if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Название товара не может быть пустым");
         }
-        this.title = title;
+        this.name = name;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
     public abstract int getPrice();
