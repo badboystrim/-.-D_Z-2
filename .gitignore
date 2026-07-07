@@ -22,13 +22,8 @@ bin/
 /nbdist/
 /.nb-gradle/
 
-
 .vscode/
-
-
 .DS_Store
-
-
 *.class
 *.jar
 *.war
@@ -45,15 +40,8 @@ release.properties
 
 *.log
 
-*.ctxt
-
 .mtj.tmp/
 
-*.nar
-
-*.zip
-*.tar.gz
-*.rar
-
-hs_err_pid*
-replay_pid*
+*.iml
+.idea
+out
