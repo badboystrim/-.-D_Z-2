@@ -8,11 +8,11 @@ public class App {
         String khaki = "\u001B[32m";
         String reset = "\u001B[0m";
 
-        Product apple = new Product("Яблоко", 100);
-        Product milk = new Product("Молоко", 80);
-        Product bread = new Product("Хлеб", 80-);
-        Product cheese = new Product("Сыр", 300);
-        Product meat = new Product("Мясо", 500);
+        Product apple = new Product("Яблоко", 180);
+        Product milk = new Product("Молоко", 120);
+        Product bread = new Product("Хлеб", 80);
+        Product cheese = new Product("Сыр", 800);
+        Product meat = new Product("Мясо", 1200);
         Product juice = new Product("Сок", 180);
 
         ProductBasket basket = new ProductBasket();
