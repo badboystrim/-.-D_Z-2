@@ -11,12 +11,12 @@ public class App {
         String khaki = "\u001B[32m";
         String reset = "\u001B[0m";
 
-        Product apple = new SimpleProduct("Яблоко", 100);
-        Product milk = new DiscountedProduct("Молоко", 100, 20);
-        Product bread = new SimpleProduct("Хлеб", 50);
+        Product apple = new SimpleProduct("Яблоко", 160);
+        Product milk = new DiscountedProduct("Молоко", 125, 20);
+        Product bread = new SimpleProduct("Хлеб", 90);
         Product cheese = new FixPriceProduct("Сыр");
-        Product meat = new SimpleProduct("Мясо", 500);
-        Product juice = new DiscountedProduct("Сок", 150, 10);
+        Product meat = new SimpleProduct("Мясо", 950);
+        Product juice = new DiscountedProduct("Сок", 220, 10);
 
         ProductBasket basket = new ProductBasket();
 
