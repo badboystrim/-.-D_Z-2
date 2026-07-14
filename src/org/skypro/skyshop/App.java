@@ -40,12 +40,14 @@ public class App {
         System.out.println(khaki + "---------- [ ЗАДАЧА 11 (Поиск) ] ----------" + reset);
 
         SearchEngine searchEngine = new SearchEngine(10);
+
         searchEngine.add(apple);
         searchEngine.add(milk);
         searchEngine.add(bread);
         searchEngine.add(cheese);
         searchEngine.add(meat);
         searchEngine.add(juice);
+
         Article appleArticle = new Article("Польза яблок", "Яблоко содержит много витаминов и полезно для здоровья.");
         Article milkArticle = new Article("Свежее молоко", "Молоко — отличный источник кальция для крепких костей.");
         Article healthyDiet = new Article("Здоровое питание", "Включите в рацион свежий сок и мясо.");
@@ -71,6 +73,7 @@ public class App {
 
         System.out.println(khaki + "-------------------------------------------" + reset);
     }
+
     private static void printSearchResults(Searchable[] results) {
         boolean found = false;
         for (Searchable result : results) {
