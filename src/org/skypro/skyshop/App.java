@@ -8,6 +8,7 @@ import org.skypro.skyshop.product.DiscountedProduct;
 import org.skypro.skyshop.product.FixPriceProduct;
 import org.skypro.skyshop.search.SearchEngine;
 import org.skypro.skyshop.search.Searchable;
+import org.skypro.skyshop.search.BestResultNotFoundException;
 
 import java.util.Arrays;
 
@@ -15,6 +16,26 @@ public class App {
     public static void main(String[] args) {
         String khaki = "\u001B[32m";
         String reset = "\u001B[0m";
+
+        System.out.println(khaki + "---------- [ ТЕСТ ВАЛИДАЦИИ ДАННЫХ ] ----------" + reset);
+        try {
+            Product badName = new SimpleProduct("   ", 100);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка (Имя): " + e.getMessage());
+        }
+
+        try {
+            Product badPrice = new SimpleProduct("Лимонад", -50);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка (Цена): " + e.getMessage());
+        }
+
+        try {
+            Product badDiscount = new DiscountedProduct("Кофе", 300, 150);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка (Скидка): " + e.getMessage());
+        }
+        System.out.println();
 
         Product apple = new SimpleProduct("Яблоко", 160);
         Product milk = new DiscountedProduct("Молоко", 125, 20);
@@ -48,7 +69,7 @@ public class App {
         searchEngine.add(meat);
         searchEngine.add(juice);
 
-        Article appleArticle = new Article("Польза яблок", "Яблоко содержит много витаминов и полезно для здоровья.");
+        Article appleArticle = new Article("Польза яблок", "Яблоко содержит много витаминов и полезно для здоровья. Яблоко - суперфуд.");
         Article milkArticle = new Article("Свежее молоко", "Молоко — отличный источник кальция для крепких костей.");
         Article healthyDiet = new Article("Здоровое питание", "Включите в рацион свежий сок и мясо.");
 
@@ -70,8 +91,27 @@ public class App {
 
         System.out.println("Тест 5 (через Arrays.toString): Поиск слова 'Хлеб'");
         System.out.println(Arrays.toString(searchEngine.search("Хлеб")));
+        System.out.println();
 
-        System.out.println(khaki + "-------------------------------------------" + reset);
+        System.out.println(khaki + "---------- [ ЗАДАЧА 12 (Поиск лучшего совпадения) ] ----------" + reset);
+
+        try {
+            System.out.println("Тест 1: Поиск лучшего совпадения для 'Яблоко'");
+            Searchable bestMatch = searchEngine.searchBestMatch("Яблоко");
+            System.out.println("-> Лучшее совпадение: " + bestMatch.getStringRepresentation());
+        } catch (BestResultNotFoundException e) {
+            System.out.println("Ошибка: " + e.getMessage());
+        }
+        System.out.println();
+
+        try {
+            System.out.println("Тест 2: Поиск лучшего совпадения для 'Рыба'");
+            Searchable bestMatch = searchEngine.searchBestMatch("Рыба");
+            System.out.println("-> Лучшее совпадение: " + bestMatch.getStringRepresentation());
+        } catch (BestResultNotFoundException e) {
+            System.out.println("-> Перехвачено исключение: " + e.getMessage());
+        }
+        System.out.println(khaki + "---------------------------------------------------------------" + reset);
     }
 
     private static void printSearchResults(Searchable[] results) {

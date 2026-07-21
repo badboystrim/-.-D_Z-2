@@ -35,4 +35,46 @@ public class SearchEngine {
         }
         return results;
     }
+
+    public Searchable searchBestMatch(String query) throws BestResultNotFoundException {
+        if (query == null || query.isBlank()) {
+            throw new BestResultNotFoundException(query);
+        }
+
+        Searchable bestMatch = null;
+        int maxCount = 0;
+
+        for (int i = 0; i < count; i++) {
+            if (searchables[i] != null) {
+                int currentCount = countOccurrences(searchables[i].getSearchTerm(), query);
+                if (currentCount > maxCount) {
+                    maxCount = currentCount;
+                    bestMatch = searchables[i];
+                }
+            }
+        }
+
+        if (bestMatch == null) {
+            throw new BestResultNotFoundException(query);
+        }
+
+        return bestMatch;
+    }
+
+    private int countOccurrences(String text, String substring) {
+        if (text == null || substring == null || substring.isEmpty()) {
+            return 0;
+        }
+
+        int countOccurrences = 0;
+        int index = 0;
+        int substringIndex = text.indexOf(substring, index);
+
+        while (substringIndex != -1) {
+            countOccurrences++;
+            index = substringIndex + substring.length();
+            substringIndex = text.indexOf(substring, index);
+        }
+        return countOccurrences;
+    }
 }

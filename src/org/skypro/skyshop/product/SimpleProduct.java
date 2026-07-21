@@ -5,8 +5,9 @@ public class SimpleProduct extends Product {
 
     public SimpleProduct(String name, int price) {
         super(name);
+
         if (price <= 0) {
-            throw new IllegalArgumentException("Цена должна быть строго больше 0");
+            throw new IllegalArgumentException("Цена должна быть строго больше 0. Получено: " + price);
         }
         this.price = price;
     }
@@ -15,7 +16,6 @@ public class SimpleProduct extends Product {
     public int getPrice() {
         return price;
     }
-
 
     @Override
     public boolean isSpecial() {
