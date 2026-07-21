@@ -1,36 +1,26 @@
 package org.skypro.skyshop.search;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class SearchEngine {
-    private final Searchable[] searchables;
-    private int count = 0;
+    private final List<Searchable> searchables = new LinkedList<>();
 
     public SearchEngine(int size) {
         if (size <= 0) {
             throw new IllegalArgumentException("Размер поискового движка должен быть больше 0");
         }
-        this.searchables = new Searchable[size];
     }
 
     public void add(Searchable searchable) {
-        if (count < searchables.length) {
-            searchables[count] = searchable;
-            count++;
-        } else {
-            System.out.println("Невозможно добавить объект для поиска: массив заполнен");
-        }
+        searchables.add(searchable);
     }
 
-    public Searchable[] search(String query) {
-        Searchable[] results = new Searchable[5];
-        int resultsCount = 0;
-
-        for (int i = 0; i < count; i++) {
-            if (resultsCount >= 5) {
-                break;
-            }
-            if (searchables[i] != null && searchables[i].getSearchTerm().contains(query)) {
-                results[resultsCount] = searchables[i];
-                resultsCount++;
+    public List<Searchable> search(String query) {
+        List<Searchable> results = new LinkedList<>();
+        for (Searchable searchable : searchables) {
+            if (searchable != null && searchable.getSearchTerm().contains(query)) {
+                results.add(searchable);
             }
         }
         return results;
@@ -44,12 +34,12 @@ public class SearchEngine {
         Searchable bestMatch = null;
         int maxCount = 0;
 
-        for (int i = 0; i < count; i++) {
-            if (searchables[i] != null) {
-                int currentCount = countOccurrences(searchables[i].getSearchTerm(), query);
+        for (Searchable searchable : searchables) {
+            if (searchable != null) {
+                int currentCount = countOccurrences(searchable.getSearchTerm(), query);
                 if (currentCount > maxCount) {
                     maxCount = currentCount;
-                    bestMatch = searchables[i];
+                    bestMatch = searchable;
                 }
             }
         }

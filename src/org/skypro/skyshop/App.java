@@ -10,7 +10,7 @@ import org.skypro.skyshop.search.SearchEngine;
 import org.skypro.skyshop.search.Searchable;
 import org.skypro.skyshop.search.BestResultNotFoundException;
 
-import java.util.Arrays;
+import java.util.List;
 
 public class App {
     public static void main(String[] args) {
@@ -56,6 +56,34 @@ public class App {
 
         System.out.println("\nСодержимое корзины:");
         basket.printBasket();
+        System.out.println();
+
+        System.out.println(khaki + "---------- [ ТЕСТ УДАЛЕНИЯ ИЗ КОРЗИНЫ ] ----------" + reset);
+        System.out.println("1. Удаляем существующий продукт 'Хлеб':");
+        List<Product> removedItems1 = basket.removeProductByName("Хлеб");
+        System.out.println("Удаленные продукты:");
+        for (Product product : removedItems1) {
+            System.out.println("-> " + product);
+        }
+        System.out.println();
+
+        System.out.println("Содержимое корзины после удаления:");
+        basket.printBasket();
+        System.out.println();
+
+        System.out.println("2. Удаляем несуществующий продукт 'Рыба':");
+        List<Product> removedItems2 = basket.removeProductByName("Рыба");
+        if (removedItems2.isEmpty()) {
+            System.out.println("Список пуст");
+        } else {
+            for (Product product : removedItems2) {
+                System.out.println("-> " + product);
+            }
+        }
+        System.out.println();
+
+        System.out.println("Итоговое содержимое корзины:");
+        basket.printBasket();
         System.out.println(khaki + "------------------------------------------------" + reset + "\n");
 
         System.out.println(khaki + "---------- [ ЗАДАЧА 11 (Поиск) ] ----------" + reset);
@@ -89,12 +117,11 @@ public class App {
         System.out.println("Тест 4: Поиск несуществующего слова 'Рыба'");
         printSearchResults(searchEngine.search("Рыба"));
 
-        System.out.println("Тест 5 (через Arrays.toString): Поиск слова 'Хлеб'");
-        System.out.println(Arrays.toString(searchEngine.search("Хлеб")));
+        System.out.println("Тест 5 (печать списка напрямую): Поиск слова 'Хлеб'");
+        System.out.println(searchEngine.search("Хлеб"));
         System.out.println();
 
         System.out.println(khaki + "---------- [ ЗАДАЧА 12 (Поиск лучшего совпадения) ] ----------" + reset);
-
         try {
             System.out.println("Тест 1: Поиск лучшего совпадения для 'Яблоко'");
             Searchable bestMatch = searchEngine.searchBestMatch("Яблоко");
@@ -114,16 +141,15 @@ public class App {
         System.out.println(khaki + "---------------------------------------------------------------" + reset);
     }
 
-    private static void printSearchResults(Searchable[] results) {
-        boolean found = false;
+    private static void printSearchResults(List<Searchable> results) {
+        if (results == null || results.isEmpty()) {
+            System.out.println("-> Ничего не найдено.\n");
+            return;
+        }
         for (Searchable result : results) {
             if (result != null) {
                 System.out.println("-> Найдено: " + result.getStringRepresentation());
-                found = true;
             }
-        }
-        if (!found) {
-            System.out.println("-> Ничего не найдено.");
         }
         System.out.println();
     }
