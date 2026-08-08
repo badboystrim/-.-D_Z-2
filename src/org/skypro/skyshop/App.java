@@ -11,7 +11,7 @@ import org.skypro.skyshop.search.Searchable;
 import org.skypro.skyshop.search.BestResultNotFoundException;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 public class App {
     public static void main(String[] args) {
@@ -142,12 +142,13 @@ public class App {
         System.out.println(khaki + "---------------------------------------------------------------" + reset);
     }
 
-    private static void printSearchResults(Map<String, Searchable> results) {
+    // Метод переписан под прием структуры Set согласно заданию 2
+    private static void printSearchResults(Set<Searchable> results) {
         if (results == null || results.isEmpty()) {
             System.out.println("-> Ничего не найдено.\n");
             return;
         }
-        for (Searchable result : results.values()) {
+        for (Searchable result : results) {
             if (result != null) {
                 System.out.println("-> Найдено: " + result.getStringRepresentation());
             }
