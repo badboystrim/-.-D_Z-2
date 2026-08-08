@@ -44,4 +44,17 @@ public class Article implements Searchable {
     public String toString() {
         return title + "\n" + text;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Article article = (Article) o;
+        return java.util.Objects.equals(title, article.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(title);
+    }
 }

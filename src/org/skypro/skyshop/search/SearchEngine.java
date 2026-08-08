@@ -1,12 +1,12 @@
 package org.skypro.skyshop.search;
 
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.Comparator;
 
 public class SearchEngine {
-    private final List<Searchable> searchables = new LinkedList<>();
+    private final Set<Searchable> searchables = new HashSet<>();
 
     public SearchEngine(int size) {
         if (size <= 0) {
@@ -15,14 +15,33 @@ public class SearchEngine {
     }
 
     public void add(Searchable searchable) {
-        searchables.add(searchable);
+        if (searchable != null) {
+            searchables.add(searchable);
+        }
     }
 
-    public Map<String, Searchable> search(String query) {
-        Map<String, Searchable> results = new TreeMap<>();
+    public Set<Searchable> search(String query) {
+        Comparator<Searchable> searchComparator = (s1, s2) -> {
+            int lengthCompare = Integer.compare(s2.getName().length(), s1.getName().length());
+            if (lengthCompare == 0) {
+                return s1.getName().compareTo(s2.getName());
+            }
+            return lengthCompare;
+        };
+
+        Set<Searchable> results = new TreeSet<>(searchComparator);
+
+        if (query == null || query.isBlank()) {
+            return results;
+        }
+
+        String lowerQuery = query.toLowerCase();
+
         for (Searchable searchable : searchables) {
-            if (searchable != null && searchable.getSearchTerm().contains(query)) {
-                results.put(searchable.getName(), searchable);
+            if (searchable != null && searchable.getSearchTerm() != null) {
+                if (searchable.getSearchTerm().toLowerCase().contains(lowerQuery)) {
+                    results.add(searchable);
+                }
             }
         }
         return results;
@@ -37,7 +56,7 @@ public class SearchEngine {
         int maxCount = 0;
 
         for (Searchable searchable : searchables) {
-            if (searchable != null) {
+            if (searchable != null && searchable.getSearchTerm() != null) {
                 int currentCount = countOccurrences(searchable.getSearchTerm(), query);
                 if (currentCount > maxCount) {
                     maxCount = currentCount;
@@ -58,14 +77,17 @@ public class SearchEngine {
             return 0;
         }
 
+        String lowerText = text.toLowerCase();
+        String lowerSubstring = substring.toLowerCase();
+
         int countOccurrences = 0;
         int index = 0;
-        int substringIndex = text.indexOf(substring, index);
+        int substringIndex = lowerText.indexOf(lowerSubstring, index);
 
         while (substringIndex != -1) {
             countOccurrences++;
-            index = substringIndex + substring.length();
-            substringIndex = text.indexOf(substring, index);
+            index = substringIndex + lowerSubstring.length();
+            substringIndex = lowerText.indexOf(lowerSubstring, index);
         }
         return countOccurrences;
     }
