@@ -4,6 +4,8 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.TreeSet;
 import java.util.Comparator;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class SearchEngine {
     private final Set<Searchable> searchables = new HashSet<>();
@@ -29,22 +31,17 @@ public class SearchEngine {
             return lengthCompare;
         };
 
-        Set<Searchable> results = new TreeSet<>(searchComparator);
-
         if (query == null || query.isBlank()) {
-            return results;
+            return new TreeSet<>(searchComparator);
         }
 
         String lowerQuery = query.toLowerCase();
 
-        for (Searchable searchable : searchables) {
-            if (searchable != null && searchable.getSearchTerm() != null) {
-                if (searchable.getSearchTerm().toLowerCase().contains(lowerQuery)) {
-                    results.add(searchable);
-                }
-            }
-        }
-        return results;
+        return searchables.stream()
+                .filter(Objects::nonNull)
+                .filter(searchable -> searchable.getSearchTerm() != null)
+                .filter(searchable -> searchable.getSearchTerm().toLowerCase().contains(lowerQuery))
+                .collect(Collectors.toCollection(() -> new TreeSet<>(searchComparator)));
     }
 
     public Searchable searchBestMatch(String query) throws BestResultNotFoundException {
@@ -52,24 +49,12 @@ public class SearchEngine {
             throw new BestResultNotFoundException(query);
         }
 
-        Searchable bestMatch = null;
-        int maxCount = 0;
-
-        for (Searchable searchable : searchables) {
-            if (searchable != null && searchable.getSearchTerm() != null) {
-                int currentCount = countOccurrences(searchable.getSearchTerm(), query);
-                if (currentCount > maxCount) {
-                    maxCount = currentCount;
-                    bestMatch = searchable;
-                }
-            }
-        }
-
-        if (bestMatch == null) {
-            throw new BestResultNotFoundException(query);
-        }
-
-        return bestMatch;
+        return searchables.stream()
+                .filter(Objects::nonNull)
+                .filter(searchable -> searchable.getSearchTerm() != null)
+                .max(Comparator.comparingInt(searchable -> countOccurrences(searchable.getSearchTerm(), query)))
+                .filter(searchable -> countOccurrences(searchable.getSearchTerm(), query) > 0)
+                .orElseThrow(() -> new BestResultNotFoundException(query));
     }
 
     private int countOccurrences(String text, String substring) {
